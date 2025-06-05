@@ -12,6 +12,7 @@ declare(strict_types=1);
 use Hyperf\HttpServer\Router\Router;
 use App\Controller\SalonController;
 use App\Controller\CollaboratorController;
+use App\Controller\SlotController;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
 
@@ -35,4 +36,12 @@ Router::addGroup('/collaborators', function () {
     Router::put('/{id}',[CollaboratorController::class, 'update']);
     Router::patch('/{id}',[CollaboratorController::class, 'update']);
     Router::delete('/{id}',[CollaboratorController::class, 'destroy']);
+});
+
+Router::addGroup('/slots', function () {
+    Router::get('/',[SlotController::class, 'index'] );
+    Router::post('/',[SlotController::class, 'store']);
+    Router::get('/{id}', [SlotController::class, 'show']);
+    Router::put('/{id}',[SlotController::class, 'update']);
+    Router::patch('/{id}',[SlotController::class, 'update']);
 });
