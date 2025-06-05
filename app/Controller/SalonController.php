@@ -34,7 +34,7 @@ class SalonController
     #[PostMapping(path: "")]
     public function store(RequestInterface $request, HttpResponse $response): ResponseInterface
     {
-        $data = $request->all(); // <- Aqui o certo!
+        $data = $request->all();
 
         $salon = Salons::create($data);
 

@@ -10,7 +10,8 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 use Hyperf\HttpServer\Router\Router;
-use \App\Controller\SalonController;
+use App\Controller\SalonController;
+use App\Controller\CollaboratorController;
 
 Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
 
@@ -24,4 +25,12 @@ Router::addGroup('/salons', function () {
     Router::put('/{id}', [SalonController::class, 'update']);
     Router::patch('/{id}', [SalonController::class, 'update']);
     Router::delete('/{id}', [SalonController::class, 'destroy']);
+});
+
+Router::addGroup('/collaborators', function () {
+    Router::get('/',[CollaboratorController::class, 'index'] );
+    Router::post('/',[CollaboratorController::class, 'store']);
+    Router::put('/{id}',[CollaboratorController::class, 'update']);
+    Router::patch('/{id}',[CollaboratorController::class, 'update']);
+    Router::delete('/{id}',[CollaboratorController::class, 'destroy']);
 });
