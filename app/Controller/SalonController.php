@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Model\Salons;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\PutMapping;
+use Hyperf\HttpServer\Annotation\PatchMapping;
 use Hyperf\HttpServer\Annotation\GetMapping;
 use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -39,6 +41,45 @@ class SalonController
         return $response->json([
             'message' => 'Salon created successfully!',
             'data' => $salon,
+        ]);
+    }
+
+    #[PutMapping(path: "/{id}")]
+    #[PatchMapping(path: "/{id}")]
+    public function update(int $id, RequestInterface $request, HttpResponse $response)
+    {
+        $salon = Salons::find($id);
+
+        if (! $salon) {
+            return $response->json([
+                'message' => 'Salon not found!',
+            ])->withStatus(404);
+        }
+
+        $data = $request->all();
+
+        $salon->update($data);
+
+        return $response->json([
+            'message' => 'Salon updated successfully!',
+            'data' => $salon,
+        ]);
+    }
+
+    public function destroy(int $id, HttpResponse $response)
+    {
+        $salon = Salons::find($id);
+
+        if (! $salon) {
+            return $response->json([
+                'message' => 'Salon not found!',
+            ])->withStatus(404);
+        }
+
+        $salon->delete();
+
+        return $response->json([
+            'message' => 'Salon deleted successfully!',
         ]);
     }
 }

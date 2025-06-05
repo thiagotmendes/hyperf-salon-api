@@ -10,13 +10,18 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 use Hyperf\HttpServer\Router\Router;
+use \App\Controller\SalonController;
 
-//Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
-//
-//Router::get('/favicon.ico', function () {
-//    return '';
-//});
-//
-//Router::addGroup('/salons', function () {
-//    Router::get('/', [\App\Controller\SalonController::class, 'index']);
-//});
+Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
+
+Router::get('/favicon.ico', function () {
+    return '';
+});
+
+Router::addGroup('/salons', function () {
+    Router::get('/', [SalonController::class, 'index']);
+    Router::post('/', [SalonController::class, 'store']);
+    Router::put('/{id}', [SalonController::class, 'update']);
+    Router::patch('/{id}', [SalonController::class, 'update']);
+    Router::delete('/{id}', [SalonController::class, 'destroy']);
+});
