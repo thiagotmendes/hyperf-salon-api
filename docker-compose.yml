@@ -1,0 +1,77 @@
+version: '3'
+services:
+  app:
+    container_name: hyperf-skeleton
+    image: hyperf-skeleton
+    build:
+      context: .
+    volumes:
+      - ./:/opt/www
+    ports:
+      - "9501:9501"   # Porta interna: 9501, Externa: 9501
+    environment:
+      - APP_ENV=dev
+      - SCAN_CACHEABLE=false
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=salon_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - hyperf-skeleton
+
+  mysql:
+    image: mysql:8.0
+    container_name: salon-api-mysql
+    restart: always   # <-- Corrigido: agora o MySQL reinicia automaticamente
+    ports:
+      - "3307:3306"    # <-- Porta local 3307 -> Porta do container 3306 (evita conflito)
+    environment:
+      MYSQL_DATABASE: salon_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_TCP_PORT: 3306
+      # Charset recomendado para Hyperf
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - hyperf-skeleton
+
+  redis:
+    image: redis:7.2
+    container_name: salon-api-redis
+    ports:
+      - "6380:6379"   # <-- Porta local 6380 -> Porta do container 6379
+    networks:
+      - hyperf-skeleton
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: salon-api-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"  # <-- Expondo phpMyAdmin na porta 8080
+    environment:
+      - PMA_HOST=mysql  # <-- nome do container do MySQL
+      - PMA_PORT=3306
+      - MYSQL_ROOT_PASSWORD=root
+    depends_on:
+      - mysql
+    networks:
+      - hyperf-skeleton
+
+networks:
+  hyperf-skeleton:
+    driver: bridge
+
+volumes:
+  mysql_data:  # <-- Volume para persistência de dados do MySQL
