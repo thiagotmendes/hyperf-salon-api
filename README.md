@@ -124,7 +124,7 @@ Credenciais phpMyAdmin:
 | Criação do projeto Hyperf                 | ✅      |
 | Configuração do banco de dados            | ✅      |
 | Criação das migrations                    | ✅      |
-| Criação dos models                        | \[ ]   |
+| Criação dos models                        | ✅    |
 | Endpoints de Salão                        | \[ ]   |
 | Endpoints de Colaborador                  | \[ ]   |
 | Endpoints de Slot                         | \[ ]   |
