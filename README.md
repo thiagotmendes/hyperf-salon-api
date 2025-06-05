@@ -125,7 +125,7 @@ Credenciais phpMyAdmin:
 | Configuração do banco de dados            | ✅      |
 | Criação das migrations                    | ✅      |
 | Criação dos models                        | ✅    |
-| Endpoints de Salão                        | \[ ]   |
+| Endpoints de Salão                        |  ✅   |
 | Endpoints de Colaborador                  | \[ ]   |
 | Endpoints de Slot                         | \[ ]   |
 | Endpoints de Agendamento                  | \[ ]   |
