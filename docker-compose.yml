@@ -25,20 +25,24 @@ services:
       - redis
     networks:
       - hyperf-skeleton
+    command: >
+      sh -c "
+      php bin/hyperf.php migrate --force &&
+      php bin/hyperf.php server:watch
+      "
 
   mysql:
     image: mysql:8.0
     container_name: salon-api-mysql
-    restart: always   # <-- Corrigido: agora o MySQL reinicia automaticamente
+    restart: always
     ports:
-      - "3307:3306"    # <-- Porta local 3307 -> Porta do container 3306 (evita conflito)
+      - "3307:3306"
     environment:
       MYSQL_DATABASE: salon_db
       MYSQL_ROOT_PASSWORD: root
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_HOST: "%"
       MYSQL_TCP_PORT: 3306
-      # Charset recomendado para Hyperf
       MYSQL_CHARSET: utf8mb4
       MYSQL_COLLATION: utf8mb4_unicode_ci
     volumes:
@@ -50,7 +54,7 @@ services:
     image: redis:7.2
     container_name: salon-api-redis
     ports:
-      - "6380:6379"   # <-- Porta local 6380 -> Porta do container 6379
+      - "6380:6379"
     networks:
       - hyperf-skeleton
 
@@ -59,9 +63,9 @@ services:
     container_name: salon-api-phpmyadmin
     restart: always
     ports:
-      - "8080:80"  # <-- Expondo phpMyAdmin na porta 8080
+      - "8080:80"
     environment:
-      - PMA_HOST=mysql  # <-- nome do container do MySQL
+      - PMA_HOST=mysql
       - PMA_PORT=3306
       - MYSQL_ROOT_PASSWORD=root
     depends_on:
@@ -74,4 +78,4 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_data:  # <-- Volume para persistência de dados do MySQL
+  mysql_data:

@@ -4,29 +4,23 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-
-
 /**
  */
-class Appointment extends Model
+class Salons extends Model
 {
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'Appointment';
+    protected ?string $table = 'salons';
 
     /**
      * The attributes that are mass assignable.
      */
     protected array $fillable = [
-        'salon_id',
-        'collaborator_id',
-        'client_name',
-        'client_phone',
-        'date',
-        'start_time',
-        'end_time',
-        'status',
+        'name',
+        'address',
+        'phone',
+        'owner_id',
     ];
 
     /**
@@ -34,9 +28,7 @@ class Appointment extends Model
      */
     protected array $casts = [
         'id' => 'integer',
-        'salon_id' => 'integer',
-        'collaborator_id' => 'integer',
-        'date' => 'date',
+        'owner_id' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

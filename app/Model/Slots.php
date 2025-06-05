@@ -8,22 +8,22 @@ namespace App\Model;
 
 /**
  */
-class Collaborator extends Model
+class Slots extends Model
 {
     /**
      * The table associated with the model.
      */
-    protected ?string $table = 'Collaborator';
+    protected ?string $table = 'slots';
 
     /**
      * The attributes that are mass assignable.
      */
     protected array $fillable = [
-        'salon_id',
-        'name',
-        'email',
-        'phone',
-        'role',
+        'collaborator_id',
+        'date',
+        'start_time',
+        'end_time',
+        'status',
     ];
 
     /**
@@ -31,7 +31,8 @@ class Collaborator extends Model
      */
     protected array $casts = [
         'id' => 'integer',
-        'salon_id' => 'integer',
+        'collaborator_id' => 'integer',
+        'date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

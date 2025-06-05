@@ -16,4 +16,5 @@ return [
             App\Exception\Handler\AppExceptionHandler::class,
         ],
     ],
+    'debug' => (getenv('APP_ENV') === 'dev'),
 ];
