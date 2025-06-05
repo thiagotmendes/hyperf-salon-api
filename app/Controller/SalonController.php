@@ -66,6 +66,21 @@ class SalonController
         ]);
     }
 
+    public function show(int $id, HttpResponse $response): ResponseInterface
+    {
+        $salon = Salons::find($id);
+
+        if (! $salon) {
+            return $response->json([
+                'message' => 'Salon not found!',
+            ]);
+        }
+
+        return $this->response->json([
+            'data' => $salon,
+        ]);
+    }
+
     public function destroy(int $id, HttpResponse $response)
     {
         $salon = Salons::find($id);

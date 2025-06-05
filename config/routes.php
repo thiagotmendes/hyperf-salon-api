@@ -22,6 +22,7 @@ Router::get('/favicon.ico', function () {
 Router::addGroup('/salons', function () {
     Router::get('/', [SalonController::class, 'index']);
     Router::post('/', [SalonController::class, 'store']);
+    Router::get('/{id}', [SalonController::class, 'show']);
     Router::put('/{id}', [SalonController::class, 'update']);
     Router::patch('/{id}', [SalonController::class, 'update']);
     Router::delete('/{id}', [SalonController::class, 'destroy']);
@@ -30,6 +31,7 @@ Router::addGroup('/salons', function () {
 Router::addGroup('/collaborators', function () {
     Router::get('/',[CollaboratorController::class, 'index'] );
     Router::post('/',[CollaboratorController::class, 'store']);
+    Router::get('/{id}', [CollaboratorController::class, 'show']);
     Router::put('/{id}',[CollaboratorController::class, 'update']);
     Router::patch('/{id}',[CollaboratorController::class, 'update']);
     Router::delete('/{id}',[CollaboratorController::class, 'destroy']);

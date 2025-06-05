@@ -17,7 +17,7 @@ class CollaboratorController
 
     public function index(RequestInterface $request): ResponseInterface
     {
-        $salonId = $request->input('salon_id'); // <- pega o parâmetro da query string
+        $salonId = $request->input('salon_id');
 
         $query = Collaborators::query();
 
@@ -31,6 +31,22 @@ class CollaboratorController
             'data' => $collaborators,
         ]);
     }
+
+    public function show(int $id): ResponseInterface
+    {
+        $collaborator = Collaborators::find($id);
+
+        if (empty($collaborator)) {
+            return $this->response->json([
+                'message' => 'Collaborator not found!',
+            ])->withStatus(404);
+        }
+
+        return $this->response->json([
+            'data' => $collaborator,
+        ]);
+    }
+
 
     public function store(RequestInterface $request): ResponseInterface
     {
@@ -62,7 +78,7 @@ class CollaboratorController
     public function destroy(int $id, HttpResponse $response): ResponseInterface
     {
         $collaborator = Collaborators::find($id);
-        
+
         if (empty($collaborator)) {
             return $response->json([
                 'message' => 'Collaborator not found!',
