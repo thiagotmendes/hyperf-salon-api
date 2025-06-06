@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+
+use App\Controller\AppointmentController;
 use Hyperf\HttpServer\Router\Router;
 use App\Controller\SalonController;
 use App\Controller\CollaboratorController;
@@ -44,4 +46,13 @@ Router::addGroup('/slots', function () {
     Router::get('/{id}', [SlotController::class, 'show']);
     Router::put('/{id}',[SlotController::class, 'update']);
     Router::patch('/{id}',[SlotController::class, 'update']);
+});
+
+Router::addGroup('/appointments', function () {
+    Router::get('/',[AppointmentController::class, 'index'] );
+    Router::post('/',[AppointmentController::class, 'store']);
+    Router::get('/{id}', [AppointmentController::class, 'show']);
+    Router::put('/{id}',[AppointmentController::class, 'update']);
+    Router::patch('/{id}',[AppointmentController::class, 'update']);
+    Router::delete('/{id}',[AppointmentController::class, 'destroy']);
 });
