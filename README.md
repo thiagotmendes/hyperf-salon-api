@@ -128,7 +128,7 @@ Credenciais phpMyAdmin:
 | Endpoints de Salão                        |  ✅   |
 | Endpoints de Colaborador                  | ✅    |
 | Endpoints de Slot                         | ✅  |
-| Endpoints de Agendamento                  | \[ ]   |
+| Endpoints de Agendamento                  | ✅   |
 | Middleware de autenticação (JWT/Auth)     | \[ ]   |
 | Documentação Swagger                      | \[ ]   |
 | Redis para cache de slots                 | \[ ]   |
