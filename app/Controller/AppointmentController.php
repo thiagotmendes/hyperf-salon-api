@@ -9,13 +9,18 @@ use App\Model\Appointments;
 use App\Model\Slots;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
+use Hyperf\Redis\RedisFactory;
 use \Psr\Http\Message\ResponseInterface;
 
 class  AppointmentController
 {
     public function __construct(
-        protected HttpResponse $response
-    ) {}
+        protected HttpResponse $response,
+        protected RedisFactory $redisFactory
+    )
+    {
+    }
+
     public function index(): ResponseInterface
     {
         $appointments = Appointments::all();
@@ -78,6 +83,15 @@ class  AppointmentController
             $slot->status = 'booked';
             $slot->save();
 
+            $redis = $this->redisFactory->get('default');
+
+            // Limpa cache global, se você estiver usando o slots:all
+            $redis->del('slots:all');
+
+            // Limpa cache específico, se usar cache por colaborador/data
+            $cacheKey = "slots:collaborator:{$slot->collaborator_id}:date:{$slot->date}";
+            $redis->del($cacheKey);
+
             // Commit
             Db::commit();
 
@@ -108,11 +122,28 @@ class  AppointmentController
             ])->withStatus(400);
         }
 
-        // Pega os dados do request
         $data = $request->all();
-
-        // Atualiza os campos
+        $oldStatus = $appointment->status;
         $appointment->update($data);
+
+        // --- Atualização do slot se necessário ---
+        if (
+            isset($data['status']) &&
+            $data['status'] === 'canceled' &&
+            $oldStatus !== 'canceled' // Evita rodar em updates inúteis
+        ) {
+            $slot = Slots::find($appointment->slot_id);
+            if ($slot && $slot->status === 'booked') {
+                $slot->status = 'available';
+                $slot->save();
+
+                // Limpa cache do slot
+                $redis = $this->redisFactory->get('default');
+                $redis->del('slots:all');
+                $redis->del("slots:collaborator:{$slot->collaborator_id}:date:{$slot->date}");
+            }
+        }
+        // --- FIM ---
 
         return $this->response->json([
             'code' => 200,
@@ -131,6 +162,19 @@ class  AppointmentController
                 'msg' => 'No data found'
             ])->withStatus(400);
         }
+
+        // --- Liberação do slot se estiver booked ---
+        $slot = Slots::find($appointment->slot_id ?? null);
+        if ($slot && $slot->status === 'booked') {
+            $slot->status = 'available';
+            $slot->save();
+
+            // Limpa o cache dos slots
+            $redis = $this->redisFactory->get('default');
+            $redis->del('slots:all');
+            $redis->del("slots:collaborator:{$slot->collaborator_id}:date:{$slot->date}");
+        }
+        // ------------------------------------------
 
         $appointment->delete();
 

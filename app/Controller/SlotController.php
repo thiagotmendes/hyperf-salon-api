@@ -8,21 +8,35 @@ use App\Model\Slots;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
+use Hyperf\Redis\RedisFactory;
 
 class SlotController
 {
     public function __construct(
-        protected HttpResponse $response
+        protected HttpResponse $response,
+        protected RedisFactory $redisFactory
     ) {}
 
     public function index(): ResponseInterface
     {
-        $slots = Slots::all();
+        $redis = $this->redisFactory->get('default');
+        $cacheKey = 'slots:all';
 
-        if (! $slots) {
-            return $this->response->json([
-                'message' => 'Slots not found!',
-            ]);
+        // Tenta obter do cache
+        $cached = $redis->get($cacheKey);
+
+        if ($cached) {
+            $slots = json_decode($cached, true);
+        } else {
+            $slots = Slots::all();
+            if (!$slots) {
+                return $this->response->json([
+                    'message' => 'Slots not found!',
+                ]);
+            }
+
+            // Salva no cache por 60 segundos
+            $redis->set($cacheKey, json_encode($slots), 60);
         }
 
         return $this->response->json([
@@ -35,6 +49,8 @@ class SlotController
         $data = $request->all();
 
         $slot = Slots::create($data);
+
+        $this->redisFactory->get('default')->del('slots:all');
 
         return $this->response->json([
             'data' => $slot,
@@ -69,6 +85,8 @@ class SlotController
 
         $slot->update($data);
 
+        $this->redisFactory->get('default')->del('slots:all');
+
         return $this->response->json([
             'message' => 'Slot updated successfully!',
             'data' => $slot,
@@ -86,6 +104,8 @@ class SlotController
         }
 
         $slot->delete();
+
+        $this->redisFactory->get('default')->del('slots:all');
 
         return $this->response->json([
             'message' => 'Slot deleted successfully!',

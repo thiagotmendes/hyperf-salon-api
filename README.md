@@ -131,7 +131,7 @@ Credenciais phpMyAdmin:
 | Endpoints de Agendamento                  | ✅   |
 | Middleware de autenticação (JWT/Auth)     | \[ ]   |
 | Documentação Swagger                      | \[ ]   |
-| Redis para cache de slots                 | \[ ]   |
+| Redis para cache de slots                 | ✅   |
 | Validação de dados de entrada (Request)   | \[ ]   |
 | Configuração do Docker para MySQL e Redis | ✅      |
 | Configuração do phpMyAdmin                | ✅      |
