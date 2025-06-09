@@ -32,6 +32,14 @@ RUN set -ex \
         echo "post_max_size=128M"; \
         echo "memory_limit=1G"; \
         echo "date.timezone=${TIMEZONE}"; \
+        # Opcache configs
+        echo "opcache.enable=1"; \
+        echo "opcache.enable_cli=1"; \
+        echo "opcache.memory_consumption=128"; \
+        echo "opcache.interned_strings_buffer=16"; \
+        echo "opcache.max_accelerated_files=10000"; \
+        echo "opcache.validate_timestamps=0"; \
+        echo "opcache.save_comments=1"; \
     } | tee conf.d/99_overrides.ini \
     # - config timezone
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
