@@ -25,11 +25,7 @@ services:
       - redis
     networks:
       - hyperf-skeleton
-    command: >
-      sh -c "
-      php bin/hyperf.php migrate --force &&
-      php bin/hyperf.php server:watch
-      "
+    command: ["sh", "./wait-for-mysql.sh"]
 
   mysql:
     image: mysql:8.0

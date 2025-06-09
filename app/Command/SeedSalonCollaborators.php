@@ -38,7 +38,7 @@ class SeedSalonCollaborators extends HyperfCommand
 
             $this->output->writeln("Created Salon: {$salon->name}");
 
-            for ($j = 1; $j <= 5; $j++) {
+            for ($j = 1; $j <= 50; $j++) {
                 $collaborator = Collaborators::create([
                     'salon_id' => $salon->id,
                     'name' => "Colaborador $j do Salão $i",
